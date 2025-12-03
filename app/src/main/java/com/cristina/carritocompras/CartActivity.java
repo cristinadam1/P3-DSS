@@ -1,10 +1,12 @@
 package com.cristina.carritocompras;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.widget.TextView;
 
 import java.util.List;
 import java.util.Locale;
@@ -14,6 +16,7 @@ public class CartActivity extends AppCompatActivity {
     private RecyclerView cartRecyclerView;
     private CartAdapter cartAdapter;
     private TextView totalPriceTextView;
+    private TextView emptyCartMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,7 @@ public class CartActivity extends AppCompatActivity {
 
         cartRecyclerView = findViewById(R.id.cartRecyclerView);
         totalPriceTextView = findViewById(R.id.totalPriceTextView);
+        emptyCartMessage = findViewById(R.id.emptyCartMessage);
         
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         
@@ -30,16 +34,27 @@ public class CartActivity extends AppCompatActivity {
 
     private void loadCart() {
         List<Product> cartItems = CartManager.getInstance(this).getCartItems();
-        cartAdapter = new CartAdapter(cartItems, new CartAdapter.OnRemoveFromCartClickListener() {
-            @Override
-            public void onRemoveFromCartClick(Product product) {
-                CartManager.getInstance(CartActivity.this).removeFromCart(product);
-                loadCart(); // Recargar la lista
-            }
-        });
-        cartRecyclerView.setAdapter(cartAdapter);
         
-        double total = CartManager.getInstance(this).getTotalPrice();
-        totalPriceTextView.setText(String.format(Locale.getDefault(), "Total: $%.2f", total));
+        if (cartItems.isEmpty()) {
+            cartRecyclerView.setVisibility(View.GONE);
+            totalPriceTextView.setVisibility(View.GONE);
+            emptyCartMessage.setVisibility(View.VISIBLE);
+        } else {
+            cartRecyclerView.setVisibility(View.VISIBLE);
+            totalPriceTextView.setVisibility(View.VISIBLE);
+            emptyCartMessage.setVisibility(View.GONE);
+            
+            cartAdapter = new CartAdapter(cartItems, new CartAdapter.OnRemoveFromCartClickListener() {
+                @Override
+                public void onRemoveFromCartClick(Product product) {
+                    CartManager.getInstance(CartActivity.this).removeFromCart(product);
+                    loadCart(); // Recargar la lista y volver a comprobar si está vacía
+                }
+            });
+            cartRecyclerView.setAdapter(cartAdapter);
+            
+            double total = CartManager.getInstance(this).getTotalPrice();
+            totalPriceTextView.setText(String.format(Locale.getDefault(), "Total: $%.2f", total));
+        }
     }
 }
