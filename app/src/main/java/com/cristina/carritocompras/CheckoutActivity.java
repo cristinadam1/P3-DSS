@@ -30,6 +30,10 @@ public class CheckoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         checkoutTotalTextView = findViewById(R.id.checkoutTotalTextView);
         confirmOrderButton = findViewById(R.id.confirmOrderButton);
 
@@ -37,6 +41,12 @@ public class CheckoutActivity extends AppCompatActivity {
         checkoutTotalTextView.setText(String.format(Locale.getDefault(), "Total: $%.2f", total));
 
         confirmOrderButton.setOnClickListener(v -> placeOrder());
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void placeOrder() {

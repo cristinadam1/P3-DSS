@@ -48,6 +48,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        // Habilitar el botón de "Atrás" en la barra de acción
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -58,6 +63,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         stores.add(new Store("Almacén Central", new LatLng(40.416775, -3.703790))); // Madrid
         stores.add(new Store("Almacén Norte", new LatLng(43.362344, -5.849413)));   // Oviedo
         stores.add(new Store("Almacén Sur", new LatLng(37.389092, -5.984459)));     // Sevilla
+    }
+
+    // Manejar el clic en el botón "Atrás"
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

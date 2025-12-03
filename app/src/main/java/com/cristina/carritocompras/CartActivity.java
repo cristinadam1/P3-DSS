@@ -26,6 +26,10 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         cartRecyclerView = findViewById(R.id.cartRecyclerView);
         totalPriceTextView = findViewById(R.id.totalPriceTextView);
         emptyCartMessage = findViewById(R.id.emptyCartMessage);
@@ -39,6 +43,13 @@ public class CartActivity extends AppCompatActivity {
         });
 
         loadCart();
+    }
+
+    // Maneja el clic en el botón "Atrás" de la barra de acción
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // Cierra la actividad actual y vuelve a la anterior
+        return true;
     }
 
     private void loadCart() {
