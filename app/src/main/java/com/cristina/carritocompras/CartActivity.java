@@ -1,7 +1,9 @@
 package com.cristina.carritocompras;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,7 @@ public class CartActivity extends AppCompatActivity {
     private CartAdapter cartAdapter;
     private TextView totalPriceTextView;
     private TextView emptyCartMessage;
+    private Button checkoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +29,15 @@ public class CartActivity extends AppCompatActivity {
         cartRecyclerView = findViewById(R.id.cartRecyclerView);
         totalPriceTextView = findViewById(R.id.totalPriceTextView);
         emptyCartMessage = findViewById(R.id.emptyCartMessage);
+        checkoutButton = findViewById(R.id.checkoutButton);
         
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         
+        checkoutButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            startActivity(intent);
+        });
+
         loadCart();
     }
 
@@ -39,10 +48,12 @@ public class CartActivity extends AppCompatActivity {
             cartRecyclerView.setVisibility(View.GONE);
             totalPriceTextView.setVisibility(View.GONE);
             emptyCartMessage.setVisibility(View.VISIBLE);
+            checkoutButton.setVisibility(View.GONE); // Ocultar checkout si está vacío
         } else {
             cartRecyclerView.setVisibility(View.VISIBLE);
             totalPriceTextView.setVisibility(View.VISIBLE);
             emptyCartMessage.setVisibility(View.GONE);
+            checkoutButton.setVisibility(View.VISIBLE); // Mostrar checkout si hay items
             
             cartAdapter = new CartAdapter(cartItems, new CartAdapter.OnRemoveFromCartClickListener() {
                 @Override

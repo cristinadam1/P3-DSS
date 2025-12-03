@@ -54,6 +54,10 @@ public class CartManager {
         saveCartItems(items);
     }
 
+    public void clearCart() {
+        saveCartItems(new ArrayList<>());
+    }
+
     private void saveCartItems(List<Product> items) {
         String json = gson.toJson(items);
         sharedPreferences.edit().putString(KEY_CART_ITEMS, json).apply();
