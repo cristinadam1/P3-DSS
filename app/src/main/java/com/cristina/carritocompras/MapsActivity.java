@@ -1,8 +1,11 @@
 package com.cristina.carritocompras;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -11,12 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -27,9 +30,9 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationClient;
+    private GPSTracker gps;
+    private LocationManager locManager;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private LatLng userLocation;
 
     private static class Store {
         final String name;
@@ -52,13 +55,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        gps = new GPSTracker(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
-        // Almacenes ficticios
+        // Almacenes
         stores.add(new Store("Almacén Central", new LatLng(40.416775, -3.703790))); // Madrid
         stores.add(new Store("Almacén Norte", new LatLng(43.362344, -5.849413)));   // Oviedo
         stores.add(new Store("Almacén Sur", new LatLng(37.389092, -5.984459)));     // Sevilla
@@ -73,37 +78,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        enableMyLocation();
 
-        for (Store store : stores) {
-            mMap.addMarker(new MarkerOptions().position(store.location).title(store.name));
-        }
+        locManager = (LocationManager) MapsActivity.this.getSystemService(Context.LOCATION_SERVICE);
 
-        // Centro la cámara en España por defecto
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.416775, -3.703790), 5));
-
-        mMap.setOnInfoWindowClickListener(marker -> {
-            LatLng destination = marker.getPosition();
-            String uri = String.format("google.navigation:q=%f,%f", destination.latitude, destination.longitude);
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            mapIntent.setPackage("com.google.android.apps.maps");
-            startActivity(mapIntent);
-        });
-    }
-
-    private void enableMyLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            mMap.setMyLocationEnabled(true);
-            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-                if (location != null) {
-                    userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
-                } else {
-                    Toast.makeText(this, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show();
+            Location location = gps.getLocation();
+            
+            if(location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                LatLng actual = new LatLng(latitude, longitude);
+
+                Marker miposicion = mMap.addMarker(new MarkerOptions()
+                        .position(actual)
+                        .snippet("Mi posición actual"));
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
+                
+                if(miposicion != null) {
+                    miposicion.showInfoWindow();
                 }
-            });
+
+                CameraPosition campos = new CameraPosition.Builder()
+                        .target(actual)
+                        .zoom(16)
+                        .bearing(45)
+                        .build();
+                
+                CameraUpdate camUp13 = CameraUpdateFactory.newCameraPosition(campos);
+                mMap.animateCamera(camUp13);
+            } else {
+                Toast.makeText(getApplicationContext(), "No se pudo obtener la ubicación. Revisa el GPS.", Toast.LENGTH_LONG).show();
+            }
+
+            for (Store store : stores) {
+                mMap.addMarker(new MarkerOptions().position(store.location).title(store.name));
+            }
         }
     }
 
@@ -112,7 +124,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                enableMyLocation();
+                onMapReady(mMap);
             } else {
                 Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
             }
