@@ -62,10 +62,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         }
 
         public void bind(final Product product, final OnAddToCartClickListener listener) {
-            productTitle.setText(product.getTitle());
+            productTitle.setText(product.getName());
             productPrice.setText(String.format(Locale.getDefault(), "$%.2f", product.getPrice()));
             Glide.with(itemView.getContext())
                     .load(product.getImage())
+                    .placeholder(R.drawable.ic_image_placeholder)
+                    .error(R.drawable.ic_image_placeholder)
                     .into(productImage);
 
             addToCartButton.setOnClickListener(v -> {

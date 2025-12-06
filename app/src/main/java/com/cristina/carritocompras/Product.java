@@ -1,32 +1,38 @@
 package com.cristina.carritocompras;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Product {
-    private int id;
-    private String title;
-    private double price;
+    @SerializedName("productoId")
+    private Integer id;
+
+    @SerializedName("productoNombre")
+    private String name;
+
+    private Double price;
+
+    // Campos extra para compatibilidad visual en Android
     private String description;
     private String category;
     private String image;
 
-    // Getters y Setters
-    public int getId() {
+    public Product(String name, double price, String description, String image, String category) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.image = image;
+        this.category = category;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
-
-    public double getPrice() {
+    public Double getPrice() {
         return price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getCategory() {
-        return category;
     }
 
     public String getImage() {

@@ -48,7 +48,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        // Habilitar el botón de "Atrás" en la barra de acción
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -59,13 +58,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // Crear almacenes ficticios
+        // Almacenes ficticios
         stores.add(new Store("Almacén Central", new LatLng(40.416775, -3.703790))); // Madrid
         stores.add(new Store("Almacén Norte", new LatLng(43.362344, -5.849413)));   // Oviedo
         stores.add(new Store("Almacén Sur", new LatLng(37.389092, -5.984459)));     // Sevilla
     }
 
-    // Manejar el clic en el botón "Atrás"
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -77,16 +75,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         enableMyLocation();
 
-        // Añadir marcadores de almacenes
         for (Store store : stores) {
             mMap.addMarker(new MarkerOptions().position(store.location).title(store.name));
         }
 
-        // Centrar la cámara en una ubicación por defecto (España)
+        // Centro la cámara en España por defecto
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.416775, -3.703790), 5));
 
         mMap.setOnInfoWindowClickListener(marker -> {
-            // Obtener la ubicación del marcador
             LatLng destination = marker.getPosition();
             String uri = String.format("google.navigation:q=%f,%f", destination.latitude, destination.longitude);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));

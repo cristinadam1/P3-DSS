@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_map"
         android:title="Mapa"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_admin"
+        android:icon="@drawable/ic_admin"
+        android:title="Admin"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -45,10 +45,9 @@ public class CartActivity extends AppCompatActivity {
         loadCart();
     }
 
-    // Maneja el clic en el botón "Atrás" de la barra de acción
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed(); // Cierra la actividad actual y vuelve a la anterior
+        onBackPressed();
         return true;
     }
 
@@ -70,7 +69,7 @@ public class CartActivity extends AppCompatActivity {
                 @Override
                 public void onRemoveFromCartClick(Product product) {
                     CartManager.getInstance(CartActivity.this).removeFromCart(product);
-                    loadCart(); // Recargar la lista y volver a comprobar si está vacía
+                    loadCart();
                 }
             });
             cartRecyclerView.setAdapter(cartAdapter);

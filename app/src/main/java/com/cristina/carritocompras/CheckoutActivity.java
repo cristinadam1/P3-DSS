@@ -17,8 +17,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CheckoutActivity extends AppCompatActivity {
 
@@ -58,20 +56,13 @@ public class CheckoutActivity extends AppCompatActivity {
 
         List<OrderProduct> orderProducts = new ArrayList<>();
         for (Product product : cartItems) {
-            // Simplificación: Asumimos cantidad 1 por producto en la lista plana
-            // En una app real, agruparíamos por ID y sumaríamos cantidades
             orderProducts.add(new OrderProduct(product.getId(), 1));
         }
 
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        OrderRequest orderRequest = new OrderRequest(1, date, orderProducts); // UserId 1 fijo
+        OrderRequest orderRequest = new OrderRequest(1, date, orderProducts);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://fakestoreapi.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
         Call<OrderResponse> call = apiService.createOrder(orderRequest);
 
         call.enqueue(new Callback<OrderResponse>() {
@@ -80,14 +71,13 @@ public class CheckoutActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(CheckoutActivity.this, "Pedido realizado con éxito! ID: " + response.body().getId(), Toast.LENGTH_LONG).show();
                     CartManager.getInstance(CheckoutActivity.this).clearCart();
-                    
-                    // Volver al inicio
+
                     Intent intent = new Intent(CheckoutActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(CheckoutActivity.this, "Error al realizar el pedido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, "Error al realizar el pedido: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 

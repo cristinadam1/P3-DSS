@@ -44,7 +44,6 @@ public class CartManager {
 
     public void removeFromCart(Product product) {
         List<Product> items = getCartItems();
-        // Buscamos por ID para eliminar correctamente ya que las referencias de objetos pueden cambiar
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getId() == product.getId()) {
                 items.remove(i);
