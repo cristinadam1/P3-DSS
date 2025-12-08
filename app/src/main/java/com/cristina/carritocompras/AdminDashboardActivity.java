@@ -45,7 +45,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         apiService = RetrofitClient.getClient().create(ApiService.class);
 
-        // Para refrescar la lista después de añadir un producto
         addProductLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -58,7 +57,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void loadProducts() {
-        apiService.getProducts().enqueue(new Callback<List<Product>>() {
+        apiService.getAllProducts(null).enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -82,7 +81,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AdminDashboardActivity.this, "Producto eliminado", Toast.LENGTH_SHORT).show();
-                    loadProducts(); // Recargar la lista
+                    loadProducts();
                 } else {
                     Toast.makeText(AdminDashboardActivity.this, "Error al eliminar: " + response.code(), Toast.LENGTH_SHORT).show();
                 }

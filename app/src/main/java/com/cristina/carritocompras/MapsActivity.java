@@ -31,7 +31,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private GPSTracker gps;
-    private LocationManager locManager;
+    private LocationManager locManager; 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private static class Store {
@@ -63,7 +63,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mapFragment.getMapAsync(this);
         }
 
-        // Almacenes
         stores.add(new Store("Almacén Central", new LatLng(40.416775, -3.703790))); // Madrid
         stores.add(new Store("Almacén Norte", new LatLng(43.362344, -5.849413)));   // Oviedo
         stores.add(new Store("Almacén Sur", new LatLng(37.389092, -5.984459)));     // Sevilla
@@ -78,7 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-
+        
         locManager = (LocationManager) MapsActivity.this.getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -93,7 +92,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 Marker miposicion = mMap.addMarker(new MarkerOptions()
                         .position(actual)
-                        .snippet("Mi posición actual"));
+                        .title("Mi Posición Actual")
+                        .snippet("Aquí estás tú"));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
                 
@@ -112,7 +112,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } else {
                 Toast.makeText(getApplicationContext(), "No se pudo obtener la ubicación. Revisa el GPS.", Toast.LENGTH_LONG).show();
             }
-
+            
             for (Store store : stores) {
                 mMap.addMarker(new MarkerOptions().position(store.location).title(store.name));
             }

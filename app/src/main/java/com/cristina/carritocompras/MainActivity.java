@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
     private FloatingActionButton fabCart;
+    private AutoCompleteTextView filterCategoryAutoComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         fabCart = findViewById(R.id.fabCart);
+        filterCategoryAutoComplete = findViewById(R.id.filterCategoryAutoComplete);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        setupFilterMenu();
 
         fabCart.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CartActivity.class);
@@ -44,35 +51,48 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadProducts();
+        loadProducts(null);
     }
 
-    private void loadProducts() {
-        // Usar RetrofitClient
+    private void setupFilterMenu() {
+        List<String> categories = new ArrayList<>();
+        categories.add("Todas");
+        categories.addAll(List.of(getResources().getStringArray(R.array.product_categories)));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories);
+        filterCategoryAutoComplete.setAdapter(adapter);
+
+        filterCategoryAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedCategory = (String) parent.getItemAtPosition(position);
+            if (selectedCategory.equals("Todas")) {
+                loadProducts(null); // Cargar todos
+            } else {
+                loadProducts(selectedCategory); // Cargar por categoría
+            }
+        });
+    }
+
+    private void loadProducts(String category) {
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<List<Product>> call = apiService.getProducts();
+        Call<List<Product>> call = apiService.getAllProducts(category);
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    List<Product> productList = response.body();
-                    productAdapter = new ProductAdapter(productList, new ProductAdapter.OnAddToCartClickListener() {
-                        @Override
-                        public void onAddToCartClick(Product product) {
-                            CartManager.getInstance(MainActivity.this).addToCart(product);
-                            Toast.makeText(MainActivity.this, "Added to cart: " + product.getName(), Toast.LENGTH_SHORT).show();
-                        }
+                if (response.isSuccessful() && response.body() != null) {
+                    productAdapter = new ProductAdapter(response.body(), product -> {
+                        CartManager.getInstance(MainActivity.this).addToCart(product);
+                        Toast.makeText(MainActivity.this, "Añadido: " + product.getName(), Toast.LENGTH_SHORT).show();
                     });
                     recyclerView.setAdapter(productAdapter);
                 } else {
-                    Log.e("MainActivity", "Error en la respuesta de la API: " + response.code());
+                    Log.e("MainActivity", "Error al cargar productos: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.e("MainActivity", "Error en la llamada a la API", t);
+                Log.e("MainActivity", "Error de conexión", t);
                 Toast.makeText(MainActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

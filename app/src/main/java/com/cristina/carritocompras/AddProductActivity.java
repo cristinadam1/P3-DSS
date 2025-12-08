@@ -1,6 +1,8 @@
 package com.cristina.carritocompras;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -14,7 +16,8 @@ import retrofit2.Response;
 
 public class AddProductActivity extends AppCompatActivity {
 
-    private TextInputEditText titleEditText, priceEditText, descriptionEditText, categoryEditText;
+    private TextInputEditText titleEditText, priceEditText, descriptionEditText;
+    private AutoCompleteTextView categoryAutoComplete;
     private Button addProductButton;
 
     @Override
@@ -29,8 +32,12 @@ public class AddProductActivity extends AppCompatActivity {
         titleEditText = findViewById(R.id.titleEditText);
         priceEditText = findViewById(R.id.priceEditText);
         descriptionEditText = findViewById(R.id.descriptionEditText);
-        categoryEditText = findViewById(R.id.categoryEditText);
+        categoryAutoComplete = findViewById(R.id.categoryAutoComplete);
         addProductButton = findViewById(R.id.addProductButton);
+
+        String[] categories = getResources().getStringArray(R.array.product_categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories);
+        categoryAutoComplete.setAdapter(adapter);
 
         addProductButton.setOnClickListener(v -> addProduct());
     }
@@ -39,28 +46,27 @@ public class AddProductActivity extends AppCompatActivity {
         addProductButton.setEnabled(false);
         Toast.makeText(this, "Guardando producto...", Toast.LENGTH_SHORT).show();
 
-        String title = titleEditText.getText().toString().trim();
+        String name = titleEditText.getText().toString().trim();
         String priceStr = priceEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
-        String category = categoryEditText.getText().toString().trim();
-        String image = ""; 
+        String category = categoryAutoComplete.getText().toString().trim();
 
-        if (title.isEmpty() || priceStr.isEmpty() || description.isEmpty() || category.isEmpty()) {
-            Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty() || priceStr.isEmpty() || category.isEmpty()) {
+            Toast.makeText(this, "Nombre, precio y categoría son obligatorios", Toast.LENGTH_SHORT).show();
             addProductButton.setEnabled(true);
             return;
         }
 
-        double price;
+        Double price;
         try {
             price = Double.parseDouble(priceStr);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "El formato del precio no es válido (ej: 10.99)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "El formato del precio no es válido", Toast.LENGTH_SHORT).show();
             addProductButton.setEnabled(true);
             return;
         }
 
-        Product newProduct = new Product(title, price, description, image, category);
+        Product newProduct = new Product(name, price, description, "", category);
 
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
