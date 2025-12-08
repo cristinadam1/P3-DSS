@@ -24,27 +24,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private GPSTracker gps;
-    private LocationManager locManager; 
+    private LocationManager locManager;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
-    private static class Store {
-        final String name;
-        final LatLng location;
-
-        Store(String name, LatLng location) {
-            this.name = name;
-            this.location = location;
-        }
-    }
-
-    private final List<Store> stores = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +47,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
-        stores.add(new Store("Almacén Central", new LatLng(40.416775, -3.703790))); // Madrid
-        stores.add(new Store("Almacén Norte", new LatLng(43.362344, -5.849413)));   // Oviedo
-        stores.add(new Store("Almacén Sur", new LatLng(37.389092, -5.984459)));     // Sevilla
     }
 
     @Override
@@ -77,27 +58,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        
+
         locManager = (LocationManager) MapsActivity.this.getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             Location location = gps.getLocation();
-            
-            if(location != null) {
+
+            if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 LatLng actual = new LatLng(latitude, longitude);
 
                 Marker miposicion = mMap.addMarker(new MarkerOptions()
                         .position(actual)
-                        .title("Mi Posición Actual")
-                        .snippet("Aquí estás tú"));
+                        .title("Mi Posición Actual"));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
-                
-                if(miposicion != null) {
+
+                if (miposicion != null) {
                     miposicion.showInfoWindow();
                 }
 
@@ -106,15 +86,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .zoom(16)
                         .bearing(45)
                         .build();
-                
+
                 CameraUpdate camUp13 = CameraUpdateFactory.newCameraPosition(campos);
                 mMap.animateCamera(camUp13);
             } else {
                 Toast.makeText(getApplicationContext(), "No se pudo obtener la ubicación. Revisa el GPS.", Toast.LENGTH_LONG).show();
-            }
-            
-            for (Store store : stores) {
-                mMap.addMarker(new MarkerOptions().position(store.location).title(store.name));
             }
         }
     }
