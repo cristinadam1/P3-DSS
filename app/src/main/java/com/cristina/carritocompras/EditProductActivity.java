@@ -37,20 +37,17 @@ public class EditProductActivity extends AppCompatActivity {
         categoryAutoComplete = findViewById(R.id.editCategoryAutoComplete);
         updateProductButton = findViewById(R.id.updateProductButton);
 
-        // Recibir datos del producto
         productId = getIntent().getIntExtra("productId", -1);
         String name = getIntent().getStringExtra("name");
         double price = getIntent().getDoubleExtra("price", 0.0);
         String description = getIntent().getStringExtra("description");
         String category = getIntent().getStringExtra("category");
 
-        // Rellenar formulario
         titleEditText.setText(name);
         priceEditText.setText(String.valueOf(price));
         descriptionEditText.setText(description);
-        categoryAutoComplete.setText(category, false); // El 'false' evita que se dispare el filtro
+        categoryAutoComplete.setText(category, false);
 
-        // Configurar desplegable
         String[] categories = getResources().getStringArray(R.array.product_categories);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories);
         categoryAutoComplete.setAdapter(adapter);
@@ -77,9 +74,8 @@ public class EditProductActivity extends AppCompatActivity {
             return;
         }
 
-        // Crear objeto y enviar a la API
         Product updatedProduct = new Product(name, price, description, "", category);
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        ApiService apiService = ApiClient.getClient().create(ApiService.class); // CAMBIO AQUÍ
 
         apiService.editProduct(productId, updatedProduct).enqueue(new Callback<Product>() {
             @Override

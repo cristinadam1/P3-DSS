@@ -68,8 +68,7 @@ public class AddProductActivity extends AppCompatActivity {
 
         Product newProduct = new Product(name, price, description, "", category);
 
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-
+        ApiService apiService = ApiClient.getClient().create(ApiService.class); // CAMBIO AQUÍ
         apiService.addProduct(newProduct).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

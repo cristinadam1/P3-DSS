@@ -36,7 +36,7 @@ public class CheckoutActivity extends AppCompatActivity {
         confirmOrderButton = findViewById(R.id.confirmOrderButton);
 
         double total = CartManager.getInstance(this).getTotalPrice();
-        checkoutTotalTextView.setText(String.format(Locale.getDefault(), "Total: $%.2f", total));
+        checkoutTotalTextView.setText(String.format(Locale.getDefault(), "$%.2f", total));
 
         confirmOrderButton.setOnClickListener(v -> placeOrder());
     }
@@ -62,7 +62,7 @@ public class CheckoutActivity extends AppCompatActivity {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         OrderRequest orderRequest = new OrderRequest(1, date, orderProducts);
 
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<OrderResponse> call = apiService.createOrder(orderRequest);
 
         call.enqueue(new Callback<OrderResponse>() {
@@ -71,7 +71,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(CheckoutActivity.this, "Pedido realizado con éxito! ID: " + response.body().getId(), Toast.LENGTH_LONG).show();
                     CartManager.getInstance(CheckoutActivity.this).clearCart();
-
+                    
                     Intent intent = new Intent(CheckoutActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

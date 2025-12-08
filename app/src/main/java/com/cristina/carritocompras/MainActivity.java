@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         filterCategoryAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
             String selectedCategory = (String) parent.getItemAtPosition(position);
             if (selectedCategory.equals("Todas")) {
-                loadProducts(null); 
+                loadProducts(null);
             } else {
                 loadProducts(selectedCategory);
             }
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadProducts(String category) {
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        ApiService apiService = ApiClient.getClient().create(ApiService.class); // CAMBIO AQUÍ
         Call<List<Product>> call = apiService.getAllProducts(category);
 
         call.enqueue(new Callback<List<Product>>() {
@@ -81,12 +81,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     productAdapter = new ProductAdapter(response.body(), 
-                        // Listener para añadir al carrito
                         product -> {
                             CartManager.getInstance(MainActivity.this).addToCart(product);
                             Toast.makeText(MainActivity.this, "Añadido: " + product.getName(), Toast.LENGTH_SHORT).show();
                         },
-                        // Listener para abrir detalle del producto
                         product -> {
                             Intent intent = new Intent(MainActivity.this, ProductDetailActivity.class);
                             intent.putExtra("name", product.getName());

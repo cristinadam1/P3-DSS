@@ -44,7 +44,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             addProductLauncher.launch(intent);
         });
 
-        apiService = RetrofitClient.getClient().create(ApiService.class);
+        apiService = ApiClient.getClient().create(ApiService.class); // CAMBIO AQUÍ
 
         addProductLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -54,7 +54,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 }
             });
 
-        // Launcher para refrescar después de editar
         editProductLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -72,9 +71,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     adapter = new AdminProductAdapter(response.body(), 
-                        // Listener para borrar
                         product -> deleteProduct(product),
-                        // Listener para editar
                         product -> editProduct(product)
                     );
                     recyclerView.setAdapter(adapter);

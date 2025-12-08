@@ -58,12 +58,12 @@ public class CartActivity extends AppCompatActivity {
             cartRecyclerView.setVisibility(View.GONE);
             totalPriceTextView.setVisibility(View.GONE);
             emptyCartMessage.setVisibility(View.VISIBLE);
-            checkoutButton.setVisibility(View.GONE); // Ocultar checkout si está vacío
+            checkoutButton.setVisibility(View.GONE);
         } else {
             cartRecyclerView.setVisibility(View.VISIBLE);
             totalPriceTextView.setVisibility(View.VISIBLE);
             emptyCartMessage.setVisibility(View.GONE);
-            checkoutButton.setVisibility(View.VISIBLE); // Mostrar checkout si hay items
+            checkoutButton.setVisibility(View.VISIBLE);
             
             cartAdapter = new CartAdapter(cartItems, new CartAdapter.OnRemoveFromCartClickListener() {
                 @Override
@@ -75,7 +75,7 @@ public class CartActivity extends AppCompatActivity {
             cartRecyclerView.setAdapter(cartAdapter);
             
             double total = CartManager.getInstance(this).getTotalPrice();
-            totalPriceTextView.setText(String.format(Locale.getDefault(), "Total: $%.2f", total));
+            totalPriceTextView.setText(String.format(Locale.getDefault(), "$%.2f", total));
         }
     }
 }
