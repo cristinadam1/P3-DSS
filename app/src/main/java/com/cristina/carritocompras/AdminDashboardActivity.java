@@ -24,6 +24,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private AdminProductAdapter adapter;
     private ApiService apiService;
     private ActivityResultLauncher<Intent> addProductLauncher;
+    private ActivityResultLauncher<Intent> editProductLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 }
             });
 
+        // Launcher para refrescar después de editar
+        editProductLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    loadProducts();
+                }
+            });
+
         loadProducts();
     }
 
@@ -61,7 +71,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter = new AdminProductAdapter(response.body(), product -> deleteProduct(product));
+                    adapter = new AdminProductAdapter(response.body(), 
+                        // Listener para borrar
+                        product -> deleteProduct(product),
+                        // Listener para editar
+                        product -> editProduct(product)
+                    );
                     recyclerView.setAdapter(adapter);
                 } else {
                     Toast.makeText(AdminDashboardActivity.this, "Error al cargar productos", Toast.LENGTH_SHORT).show();
@@ -73,6 +88,16 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 Toast.makeText(AdminDashboardActivity.this, "Fallo de red", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void editProduct(Product product) {
+        Intent intent = new Intent(this, EditProductActivity.class);
+        intent.putExtra("productId", product.getId());
+        intent.putExtra("name", product.getName());
+        intent.putExtra("price", product.getPrice());
+        intent.putExtra("description", product.getDescription());
+        intent.putExtra("category", product.getCategory());
+        editProductLauncher.launch(intent);
     }
 
     private void deleteProduct(Product product) {

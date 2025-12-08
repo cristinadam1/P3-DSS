@@ -40,6 +40,16 @@
     </LinearLayout>
 
     <ImageButton
+        android:id="@+id/editProductButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_edit"
+        app:tint="@color/purple_500"
+        android:scaleType="centerInside"
+        android:contentDescription="Edit product" />
+
+    <ImageButton
         android:id="@+id/deleteProductButton"
         android:layout_width="48dp"
         android:layout_height="48dp"

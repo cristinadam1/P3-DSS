@@ -18,15 +18,21 @@ import java.util.Locale;
 public class AdminProductAdapter extends RecyclerView.Adapter<AdminProductAdapter.ViewHolder> {
 
     private List<Product> productList;
-    private OnDeleteProductClickListener listener;
+    private OnDeleteProductClickListener deleteListener;
+    private OnEditProductClickListener editListener;
 
     public interface OnDeleteProductClickListener {
         void onDeleteProductClick(Product product);
     }
 
-    public AdminProductAdapter(List<Product> productList, OnDeleteProductClickListener listener) {
+    public interface OnEditProductClickListener {
+        void onEditProductClick(Product product);
+    }
+
+    public AdminProductAdapter(List<Product> productList, OnDeleteProductClickListener deleteListener, OnEditProductClickListener editListener) {
         this.productList = productList;
-        this.listener = listener;
+        this.deleteListener = deleteListener;
+        this.editListener = editListener;
     }
 
     @NonNull
@@ -39,7 +45,7 @@ public class AdminProductAdapter extends RecyclerView.Adapter<AdminProductAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.bind(product, listener);
+        holder.bind(product, deleteListener, editListener);
     }
 
     @Override
@@ -51,6 +57,7 @@ public class AdminProductAdapter extends RecyclerView.Adapter<AdminProductAdapte
         ImageView productImage;
         TextView productTitle;
         TextView productPrice;
+        ImageButton editProductButton;
         ImageButton deleteProductButton;
 
         public ViewHolder(@NonNull View itemView) {
@@ -58,10 +65,11 @@ public class AdminProductAdapter extends RecyclerView.Adapter<AdminProductAdapte
             productImage = itemView.findViewById(R.id.productImage);
             productTitle = itemView.findViewById(R.id.productTitle);
             productPrice = itemView.findViewById(R.id.productPrice);
+            editProductButton = itemView.findViewById(R.id.editProductButton);
             deleteProductButton = itemView.findViewById(R.id.deleteProductButton);
         }
 
-        public void bind(final Product product, final OnDeleteProductClickListener listener) {
+        public void bind(final Product product, final OnDeleteProductClickListener deleteListener, final OnEditProductClickListener editListener) {
             productTitle.setText(product.getName());
             productPrice.setText(String.format(Locale.getDefault(), "$%.2f", product.getPrice()));
             Glide.with(itemView.getContext())
@@ -70,9 +78,15 @@ public class AdminProductAdapter extends RecyclerView.Adapter<AdminProductAdapte
                     .error(R.drawable.ic_image_placeholder)
                     .into(productImage);
 
+            editProductButton.setOnClickListener(v -> {
+                if (editListener != null) {
+                    editListener.onEditProductClick(product);
+                }
+            });
+
             deleteProductButton.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onDeleteProductClick(product);
+                if (deleteListener != null) {
+                    deleteListener.onDeleteProductClick(product);
                 }
             });
         }

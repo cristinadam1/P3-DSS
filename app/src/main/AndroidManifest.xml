@@ -19,7 +19,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCd0qzOvslXHAU5UXmeiH0vto7MqyT3jcc" />
+            android:value="API_CRIS" />
 
         <activity
             android:name=".MainActivity"
@@ -36,6 +36,8 @@
         <activity android:name=".AdminLoginActivity" />
         <activity android:name=".AdminDashboardActivity" />
         <activity android:name=".AddProductActivity" />
+        <activity android:name=".ProductDetailActivity" />
+        <activity android:name=".EditProductActivity" />
     </application>
 
 </manifest>

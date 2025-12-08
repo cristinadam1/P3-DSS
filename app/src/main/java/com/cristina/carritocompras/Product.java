@@ -11,7 +11,6 @@ public class Product {
 
     private Double price;
 
-    // Campos extra para compatibilidad visual en Android
     private String description;
     private String category;
     private String image;
@@ -24,6 +23,7 @@ public class Product {
         this.category = category;
     }
 
+    // Getters y Setters
     public Integer getId() {
         return id;
     }
@@ -31,11 +31,21 @@ public class Product {
     public String getName() {
         return name;
     }
+
     public Double getPrice() {
         return price;
     }
 
     public String getImage() {
         return image;
+    }
+
+    // MÉTODOS AÑADIDOS DE NUEVO
+    public String getCategory() {
+        return category;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

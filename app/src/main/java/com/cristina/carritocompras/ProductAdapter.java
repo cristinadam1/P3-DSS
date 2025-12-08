@@ -18,15 +18,21 @@ import java.util.Locale;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private List<Product> productList;
-    private OnAddToCartClickListener listener;
+    private OnAddToCartClickListener cartListener;
+    private OnProductClickListener productListener;
 
     public interface OnAddToCartClickListener {
         void onAddToCartClick(Product product);
     }
 
-    public ProductAdapter(List<Product> productList, OnAddToCartClickListener listener) {
+    public interface OnProductClickListener {
+        void onProductClick(Product product);
+    }
+
+    public ProductAdapter(List<Product> productList, OnAddToCartClickListener cartListener, OnProductClickListener productListener) {
         this.productList = productList;
-        this.listener = listener;
+        this.cartListener = cartListener;
+        this.productListener = productListener;
     }
 
     @NonNull
@@ -39,7 +45,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.bind(product, listener);
+        holder.bind(product, cartListener, productListener);
     }
 
     @Override
@@ -61,7 +67,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             addToCartButton = itemView.findViewById(R.id.addToCartButton);
         }
 
-        public void bind(final Product product, final OnAddToCartClickListener listener) {
+        public void bind(final Product product, final OnAddToCartClickListener cartListener, final OnProductClickListener productListener) {
             productTitle.setText(product.getName());
             productPrice.setText(String.format(Locale.getDefault(), "$%.2f", product.getPrice()));
             Glide.with(itemView.getContext())
@@ -71,8 +77,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     .into(productImage);
 
             addToCartButton.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onAddToCartClick(product);
+                if (cartListener != null) {
+                    cartListener.onAddToCartClick(product);
+                }
+            });
+
+            itemView.setOnClickListener(v -> {
+                if (productListener != null) {
+                    productListener.onProductClick(product);
                 }
             });
         }

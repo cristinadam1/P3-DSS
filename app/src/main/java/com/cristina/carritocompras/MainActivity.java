@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
         filterCategoryAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
             String selectedCategory = (String) parent.getItemAtPosition(position);
             if (selectedCategory.equals("Todas")) {
-                loadProducts(null); // Cargar todos
+                loadProducts(null); 
             } else {
-                loadProducts(selectedCategory); // Cargar por categoría
+                loadProducts(selectedCategory);
             }
         });
     }
@@ -80,10 +80,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    productAdapter = new ProductAdapter(response.body(), product -> {
-                        CartManager.getInstance(MainActivity.this).addToCart(product);
-                        Toast.makeText(MainActivity.this, "Añadido: " + product.getName(), Toast.LENGTH_SHORT).show();
-                    });
+                    productAdapter = new ProductAdapter(response.body(), 
+                        // Listener para añadir al carrito
+                        product -> {
+                            CartManager.getInstance(MainActivity.this).addToCart(product);
+                            Toast.makeText(MainActivity.this, "Añadido: " + product.getName(), Toast.LENGTH_SHORT).show();
+                        },
+                        // Listener para abrir detalle del producto
+                        product -> {
+                            Intent intent = new Intent(MainActivity.this, ProductDetailActivity.class);
+                            intent.putExtra("name", product.getName());
+                            intent.putExtra("price", product.getPrice());
+                            intent.putExtra("category", product.getCategory());
+                            intent.putExtra("description", product.getDescription());
+                            intent.putExtra("image", product.getImage());
+                            startActivity(intent);
+                        }
+                    );
                     recyclerView.setAdapter(productAdapter);
                 } else {
                     Log.e("MainActivity", "Error al cargar productos: " + response.code());
