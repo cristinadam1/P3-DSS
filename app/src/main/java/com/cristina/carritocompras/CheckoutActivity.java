@@ -17,7 +17,6 @@ import retrofit2.Response;
 
 /**
  * Actividad que gestiona la pantalla final del proceso de compra (checkout).
- * 
  * Muestra un resumen del precio total y un botón para confirmar el pedido
  * Al confirmar, envía los datos del carrito al servidor para crear la orden
  */
@@ -30,7 +29,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
     /**
      * Se ejecuta al crear la actividad.
-     * 
      * Inicializa las vistas, calcula y muestra el precio total, y configura el listener del botón de confirmación.
      */
     @Override
@@ -62,7 +60,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
     /**
      * Prepara y envía la solicitud del pedido al servidor.
-     * 
      * Recoge los productos del carrito, construye el objeto de la solicitud (OrderRequest)
      * y lo envía a la API. Si la operación tiene éxito, vacía el carrito y vuelve a la pantalla principal
      */

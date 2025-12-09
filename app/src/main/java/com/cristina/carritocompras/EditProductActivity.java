@@ -11,12 +11,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Actividad que gestiona la edición de un producto existente.
+ * Presenta un formulario pre-cargado con los datos del producto seleccionado.
+ * Permite al administrador modificar los detalles y enviar la actualización al servidor.
+ */
 public class EditProductActivity extends AppCompatActivity {
-    private TextInputEditText titleEditText, priceEditText, descriptionEditText;
+
+    /** Campo de texto para el título del producto */
+    private TextInputEditText titleEditText;
+    /** Campo de texto para el precio del producto */
+    private TextInputEditText priceEditText;
+    /** Campo de texto para la descripción del producto */
+    private TextInputEditText descriptionEditText;
+    /** Menú desplegable para seleccionar la categoría del producto */
     private AutoCompleteTextView categoryAutoComplete;
+    /** Botón para enviar el formulario y actualizar el producto */
     private Button updateProductButton;
+    /** El ID del producto que se está editando */
     private Integer productId;
 
+    /**
+     * Se ejecuta al crear la actividad.
+     * Inicializa las vistas, recibe los datos del producto a editar desde el Intent,
+     * rellena el formulario con esos datos y configura los listeners
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +43,7 @@ public class EditProductActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Editar producto");
+            getSupportActionBar().setTitle("Editar Producto");
         }
 
         titleEditText = findViewById(R.id.editTitleEditText);
@@ -33,17 +52,20 @@ public class EditProductActivity extends AppCompatActivity {
         categoryAutoComplete = findViewById(R.id.editCategoryAutoComplete);
         updateProductButton = findViewById(R.id.updateProductButton);
 
+        // recibe los datos del producto desde el Intent
         productId = getIntent().getIntExtra("productId", -1);
         String name = getIntent().getStringExtra("name");
         double price = getIntent().getDoubleExtra("price", 0.0);
         String description = getIntent().getStringExtra("description");
         String category = getIntent().getStringExtra("category");
 
+        // rellena los campos del formulario
         titleEditText.setText(name);
         priceEditText.setText(String.valueOf(price));
         descriptionEditText.setText(description);
         categoryAutoComplete.setText(category, false);
 
+        // configura el menú desplegable de categorias
         String[] categories = getResources().getStringArray(R.array.product_categories);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories);
         categoryAutoComplete.setAdapter(adapter);
@@ -51,6 +73,11 @@ public class EditProductActivity extends AppCompatActivity {
         updateProductButton.setOnClickListener(v -> updateProduct());
     }
 
+    /**
+     * Recoge los datos modificados del formulario, los valida y los envía al servidor.
+     * Construye un objeto Product con los nuevos datos y usa la API para actualizarlo.
+     * Si tiene éxito, cierra la actividad y vuelve al panel de administración.
+     */
     private void updateProduct() {
         String name = titleEditText.getText().toString().trim();
         String priceStr = priceEditText.getText().toString().trim();
@@ -92,6 +119,9 @@ public class EditProductActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gestiona la navegación hacia atrás desde el botón en la barra de acción
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
