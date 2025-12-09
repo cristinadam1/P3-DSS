@@ -10,7 +10,6 @@ public class Product {
     private String name;
 
     private Double price;
-
     private String description;
     private String category;
     private String image;
@@ -23,28 +22,21 @@ public class Product {
         this.category = category;
     }
 
-    // Getters y Setters
     public Integer getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
-
     public Double getPrice() {
         return price;
     }
-
     public String getImage() {
         return image;
     }
-
-    // MÉTODOS AÑADIDOS DE NUEVO
     public String getCategory() {
         return category;
     }
-
     public String getDescription() {
         return description;
     }

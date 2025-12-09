@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,7 +74,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(CheckoutActivity.this, "Error al realizar el pedido: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, "Error al hacer el pedido: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 

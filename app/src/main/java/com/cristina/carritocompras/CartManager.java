@@ -45,7 +45,7 @@ public class CartManager {
     public void removeFromCart(Product product) {
         List<Product> items = getCartItems();
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getId().equals(product.getId())) { // Usar .equals para comparar Integer
+            if (items.get(i).getId().equals(product.getId())) {
                 items.remove(i);
                 break;
             }

@@ -2,18 +2,14 @@ package com.cristina.carritocompras;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +21,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
     private GPSTracker gps;
     private LocationManager locManager;
@@ -73,7 +68,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 Marker miposicion = mMap.addMarker(new MarkerOptions()
                         .position(actual)
-                        .title("Mi Posición Actual"));
+                        .title("Mi posición actual"));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
 
@@ -90,7 +85,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 CameraUpdate camUp13 = CameraUpdateFactory.newCameraPosition(campos);
                 mMap.animateCamera(camUp13);
             } else {
-                Toast.makeText(getApplicationContext(), "No se pudo obtener la ubicación. Revisa el GPS.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No se ha podido obtener la ubicación. Revisa el GPS.", Toast.LENGTH_LONG).show();
             }
         }
     }

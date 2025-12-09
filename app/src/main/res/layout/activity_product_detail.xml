@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                tools:text="Título del Producto"/>
+                tools:text="Título del producto"/>
 
             <TextView
                 android:id="@+id/detailProductPrice"

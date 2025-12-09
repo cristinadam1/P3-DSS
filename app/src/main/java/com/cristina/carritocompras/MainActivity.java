@@ -8,23 +8,18 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
     private FloatingActionButton fabCart;
@@ -73,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadProducts(String category) {
-        ApiService apiService = ApiClient.getClient().create(ApiService.class); // CAMBIO AQUÍ
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<List<Product>> call = apiService.getAllProducts(category);
 
         call.enqueue(new Callback<List<Product>>() {

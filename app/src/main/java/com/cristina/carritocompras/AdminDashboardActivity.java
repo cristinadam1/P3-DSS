@@ -3,23 +3,18 @@ package com.cristina.carritocompras;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AdminDashboardActivity extends AppCompatActivity {
-
     private RecyclerView recyclerView;
     private AdminProductAdapter adapter;
     private ApiService apiService;
@@ -44,7 +39,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             addProductLauncher.launch(intent);
         });
 
-        apiService = ApiClient.getClient().create(ApiService.class); // CAMBIO AQUÍ
+        apiService = ApiClient.getClient().create(ApiService.class);
 
         addProductLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),

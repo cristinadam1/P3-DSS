@@ -5,17 +5,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditProductActivity extends AppCompatActivity {
-
     private TextInputEditText titleEditText, priceEditText, descriptionEditText;
     private AutoCompleteTextView categoryAutoComplete;
     private Button updateProductButton;
@@ -28,7 +24,7 @@ public class EditProductActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Editar Producto");
+            getSupportActionBar().setTitle("Editar producto");
         }
 
         titleEditText = findViewById(R.id.editTitleEditText);
@@ -75,7 +71,7 @@ public class EditProductActivity extends AppCompatActivity {
         }
 
         Product updatedProduct = new Product(name, price, description, "", category);
-        ApiService apiService = ApiClient.getClient().create(ApiService.class); // CAMBIO AQUÍ
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
         apiService.editProduct(productId, updatedProduct).enqueue(new Callback<Product>() {
             @Override

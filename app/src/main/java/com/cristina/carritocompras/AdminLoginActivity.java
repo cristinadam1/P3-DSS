@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AdminLoginActivity extends AppCompatActivity {
-
     private TextInputEditText usernameEditText;
     private TextInputEditText passwordEditText;
     private Button loginButton;
@@ -32,7 +29,7 @@ public class AdminLoginActivity extends AppCompatActivity {
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            if (username.equals("admin") && password.equals("1234")) {
+            if (username.equals("admin") && password.equals("admin")) {
                 Intent intent = new Intent(AdminLoginActivity.this, AdminDashboardActivity.class);
                 startActivity(intent);
                 finish();

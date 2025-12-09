@@ -47,6 +47,6 @@
         android:src="@drawable/ic_delete"
         app:tint="#FF0000"
         android:scaleType="centerInside"
-        android:contentDescription="Remove from cart" />
+        android:contentDescription="Eliminar del carrito" />
 
 </LinearLayout>

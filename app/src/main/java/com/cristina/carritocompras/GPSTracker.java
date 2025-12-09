@@ -44,7 +44,7 @@ public class GPSTracker extends Service implements LocationListener {
         getLocation();
     }
 
-    @SuppressLint("MissingPermission") // Los permisos se piden en la Activity antes de instanciar esto
+    @SuppressLint("MissingPermission")
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);

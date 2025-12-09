@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resumen del Pedido"
+        android:text="Resumen del pedido"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="24dp"/>
@@ -18,7 +18,7 @@
         android:id="@+id/checkoutTotalTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total: $0.00"
+        android:text="Total: 0.00€"
         android:textSize="20sp"
         android:layout_marginBottom="32dp"/>
 
@@ -26,7 +26,7 @@
         android:id="@+id/confirmOrderButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirmar Compra"
+        android:text="Confirmar compra"
         android:padding="16dp"/>
 
 </LinearLayout>
