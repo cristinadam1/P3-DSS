@@ -7,11 +7,24 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
+/**
+ * Actividad que gestiona la pantalla de inicio de sesión para el administrador.
+ * Esta pantalla tiene un formulario de autenticación. Si las credenciales son correctas,
+ * redirige al panel de administración (AdminDashboardActivity). En caso contrario, muestra un mensaje de error
+ */
 public class AdminLoginActivity extends AppCompatActivity {
+
+    /** Campo de texto para el nombre de usuario */
     private TextInputEditText usernameEditText;
+    /** Campo de texto para la contraseña */
     private TextInputEditText passwordEditText;
+    /** Botón para iniciar el proceso de login */
     private Button loginButton;
 
+    /**
+     * Método que se ejecuta al crear la actividad.
+     * Inicializa los componentes de la interfaz, establece un listener para el botón de login y define la lógica de autenticación.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +52,10 @@ public class AdminLoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gestiona la navegación hacia atrás desde el botón en la barra de acción.
+     * Cierra la actividad actual y vuelve a la pantalla anterior
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
