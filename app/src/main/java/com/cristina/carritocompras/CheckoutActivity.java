@@ -28,8 +28,8 @@ public class CheckoutActivity extends AppCompatActivity {
     private Button confirmOrderButton;
 
     /**
-     * Se ejecuta al crear la actividad.
-     * Inicializa las vistas, calcula y muestra el precio total, y configura el listener del botón de confirmación.
+     * Se ejecuta al crear la actividad
+     * Inicializa las vistas, calcula y muestra el precio total, y configura el listener del botón de confirmación
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     /**
-     * Prepara y envía la solicitud del pedido al servidor.
+     * Prepara y envía la solicitud del pedido al servidor
      * Recoge los productos del carrito, construye el objeto de la solicitud (OrderRequest)
      * y lo envía a la API. Si la operación tiene éxito, vacía el carrito y vuelve a la pantalla principal
      */
@@ -75,7 +75,7 @@ public class CheckoutActivity extends AppCompatActivity {
             orderProducts.add(new OrderProduct(product.getId(), 1)); // Asumimos cantidad 1 por simplicidad
         }
 
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         OrderRequest orderRequest = new OrderRequest(1, date, orderProducts); // Asumimos UserId 1
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
