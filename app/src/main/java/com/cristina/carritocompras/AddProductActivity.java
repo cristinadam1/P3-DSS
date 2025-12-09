@@ -5,17 +5,39 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Gestiona la creación de un producto nuevo
+ * <p>
+ * Presenta un formulario para que el administrador introduzca los detalles de un producto
+ * y envía los datos al servidor para que se creen
+ */
 public class AddProductActivity extends AppCompatActivity {
-    private TextInputEditText titleEditText, priceEditText, descriptionEditText;
+
+    /** Campo de texto para el título del producto */
+    private TextInputEditText titleEditText;
+    /** Campo de texto para el precio del producto */
+    private TextInputEditText priceEditText;
+    /** Campo de texto para la descripción del producto */
+    private TextInputEditText descriptionEditText;
+    /** Menú desplegable para seleccionar la categoría del producto */
     private AutoCompleteTextView categoryAutoComplete;
+    /** Botón para enviar el formulario y guardar el producto */
     private Button addProductButton;
 
+    /**
+     * Se ejecuta cuando la actividad se creada. Inicializa las vistas, configura
+     * el menú desplegable de categorías y establece los listeners de los botones.
+     * @param savedInstanceState Si la actividad se reinicia, contiene los datos guardados previamente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +59,12 @@ public class AddProductActivity extends AppCompatActivity {
 
         addProductButton.setOnClickListener(v -> addProduct());
     }
+
+    /**
+     * Recoge los datos del formulario, los valida y los envía al servidor para crear el producto.
+     * <p>
+     * Muestra mensajes de feedback al usuario durante el proceso y, si tiene éxito, cierra la actividad.
+     */
     private void addProduct() {
         addProductButton.setEnabled(false);
         Toast.makeText(this, "Guardando producto...", Toast.LENGTH_SHORT).show();
@@ -85,6 +113,10 @@ public class AddProductActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gestiona el clic en el botón de "Atrás" de la barra de acción.
+     * @return Siempre devuelve true para indicar que el evento ha sido gestionado.
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
