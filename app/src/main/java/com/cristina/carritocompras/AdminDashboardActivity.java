@@ -14,13 +14,34 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Actividad principal para la gestión de productos por parte del administrador.
+ * Esta pantalla muestra una lista de todos los productos y proporciona
+ * las opciones para añadir, editar y eliminar productos del catálogo
+ */
 public class AdminDashboardActivity extends AppCompatActivity {
+
+    /** Lista visual para mostrar los productos */
     private RecyclerView recyclerView;
+    /** Adaptador que conecta los datos de los productos con el RecyclerView */
     private AdminProductAdapter adapter;
+    /** Interfaz para realizar las llamadas a la API REST */
     private ApiService apiService;
+    /**
+     * Launcher para gestionar el resultado de la pantalla de añadir producto.
+     * Se utiliza para refrescar la lista cuando se añade un nuevo producto.
+     */
     private ActivityResultLauncher<Intent> addProductLauncher;
+    /**
+     * Launcher para gestionar el resultado de la pantalla de editar producto.
+     * Se utiliza para refrescar la lista cuando se actualiza un producto.
+     */
     private ActivityResultLauncher<Intent> editProductLauncher;
 
+    /**
+     * Método que se ejecuta al crear la actividad.
+     * Inicializa los componentes de la interfaz, los listeners y los launchers.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +81,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
         loadProducts();
     }
 
+    /**
+     * Obtiene la lista completa de productos desde la API y la muestra en el RecyclerView.
+     * Se pasa "null" como categoría para asegurar que se obtienen todos los productos sin filtrar.
+     */
     private void loadProducts() {
         apiService.getAllProducts(null).enqueue(new Callback<List<Product>>() {
             @Override
@@ -82,6 +107,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Prepara y lanza la actividad para editar un producto.
+     * Crea un Intent, le añade los datos del producto seleccionado como extras y abre la pantalla "EditProductActivity".
+     * @param product El objeto del producto sobre el que se ha pulsado "editar"
+     */
     private void editProduct(Product product) {
         Intent intent = new Intent(this, EditProductActivity.class);
         intent.putExtra("productId", product.getId());
@@ -92,6 +122,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
         editProductLauncher.launch(intent);
     }
 
+    /**
+     * Hace una llamada a la API para eliminar un producto por su ID.
+     * Si la operación tiene éxito, refresca la lista de productos.
+     * @param product El producto que se va a eliminar.
+     */
     private void deleteProduct(Product product) {
         apiService.deleteProduct(product.getId()).enqueue(new Callback<Void>() {
             @Override
@@ -111,6 +146,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gestiona la navegación hacia atrás desde el botón en la barra de acción.
+     * Cierra la actividad actual y vuelve a la pantalla anterior.
+     */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
