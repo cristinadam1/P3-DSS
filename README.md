@@ -16,12 +16,12 @@ Para poner en marcha el proyecto, hay que hacer lo siguiente:
     *   En Android Studio, seleccionar **File > Open** e ir hasta la carpeta del proyecto
 
 3.  **Configuración de la API:**
-    *   La aplicación está configurada para conectar al emulador mediante `http://10.0.2.2:8080/`.
+    *   La aplicación está configurada para conectar al emulador mediante `http://10.0.2.2:8080/`
     *   Para abrirla en un móvil, hay que editar la variable `BASE_URL` en `src/main/java/com/cristina/carritocompras/ApiClient.java` con la IP local
 
 4.  **Ejecución:**
-    *   Sincronizar el proyecto con Gradle (`Sync Project`).
-    *   Seleccionar un emulador y darle al botón **Run**.
+    *   Sincronizar el proyecto con Gradle (`Sync Project`)
+    *   Seleccionar un emulador y darle al botón **Run**
 
 5.  **Acceso al panel de administración:**
     *   Desde el menú de la pantalla principal, seleccionar el emoticono de persona (admin). Las credenciales son las siguientes:
@@ -45,8 +45,8 @@ El proyecto usa las siguientes librerías externas para su funcionamiento:
 El código fuente está en `src/main/java/com/cristina/carritocompras/` y se organiza de la siguiente manera:
 
 *   **`api/`:**
-    *   `ApiClient.java`: para la instancia de Retrofit.
-    *   `ApiService.java`: se definen los endpoints HTTP de la API.
+    *   `ApiClient.java`: para la instancia de Retrofit
+    *   `ApiService.java`: se definen los endpoints HTTP de la API
 *   **`models/`:** se representan los datos (`Product`, `OrderRequest`, `OrderProduct`, `OrderResponse`).
 *   **`adapters/`:**
     *   `ProductAdapter.java`: Gestiona la lista del catálogo principal
@@ -65,10 +65,10 @@ El código fuente está en `src/main/java/com/cristina/carritocompras/` y se org
 
 La aplicación interactúa con los siguientes recursos del servidor:
 
-| Método HTTP | Endpoint | Descripción |
-| :--- | :--- | :--- |
-| **GET** | `/api/products` | Descarga la lista completa de productos. Admite el parámetro `category` para filtrar. |
-| **POST** | `/api/products` | Crea un nuevo producto en la base de datos (Usado en el panel Admin). |
-| **PUT** | `/api/products/{id}` | Actualiza los datos de un producto existente identificado por su ID. |
-| **DELETE** | `/api/products/{id}` | Elimina un producto del catálogo. |
-| **POST** | `/api/carts` | Envía la confirmación del pedido (Checkout). El cuerpo de la petición incluye el ID de usuario, fecha y lista de productos. |
+| Método HTTP | Endpoint | Descripción                                                                                                                |
+| :--- | :--- |:---------------------------------------------------------------------------------------------------------------------------|
+| **GET** | `/api/products` | Obtener la lista completa de productos. Admite el parámetro `category` para filtrar                                        |
+| **POST** | `/api/products` | Crear un nuevo producto en la base de datos (se usa en el panel Admin)                                                     |
+| **PUT** | `/api/products/{id}` | Actualiza los datos de un producto existente identificado por su ID (para modificaciones)                                  |
+| **DELETE** | `/api/products/{id}` | Elimina un producto del catálogo                                                                                           |
+| **POST** | `/api/carts` | Envía la confirmación del pedido (Checkout). El cuerpo de la petición incluye el ID de usuario, fecha y lista de productos |
