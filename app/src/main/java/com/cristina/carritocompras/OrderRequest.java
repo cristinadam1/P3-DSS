@@ -25,4 +25,14 @@ public class OrderRequest {
         this.date = date;
         this.products = products;
     }
+
+    public int getUserId() {
+        return userId;
+    }
+    public String getDate() {
+        return date;
+    }
+    public List<OrderProduct> getProducts() {
+        return products;
+    }
 }

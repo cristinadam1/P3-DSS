@@ -43,7 +43,7 @@ public class Product {
         this.category = category;
     }
 
-    // Getters
+    // Getters y setters
 
     public Integer getId() {
         return id;
@@ -67,5 +67,28 @@ public class Product {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(Integer id){
+        this.id = id;
+    }
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
