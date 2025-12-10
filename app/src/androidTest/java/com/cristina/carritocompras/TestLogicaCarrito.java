@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  * y calcular el total de los productos en el carrito.
  */
 @RunWith(AndroidJUnit4.class)
-public class TestCarrito {
+public class TestLogicaCarrito {
 
     private CartManager cartManager;
 
