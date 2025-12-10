@@ -1,73 +1,74 @@
-# Carrito de Compras
+# CarritoComprasApp
 
-Este proyecto es una aplicación Android nativa que implementa un sistema de carrito de compras completo. La aplicación se conecta a un backend propio desarrollado en Spring Boot, permitiendo la gestión de productos en tiempo real, la simulación de pedidos y la visualización de puntos de venta en un mapa.
+Aplicación nativa Android de comercio electrónico desarrollada en Java para Práctica 3 de la asignatura Desarrollo de Sistemas de Software basados en Componentes y Servicios. 
+Permite la visualización de un catálogo de productos previamente añadidos, gestión de carrito de compras, realización de pedidos, geolocalización de tiendas y administración de productos mediante una API RESTful.
 
-## Características
+## 1. Instrucciones de instalación y ejecución de la app
 
-#### Catálogo de Productos
-- **Visualización de productos**: La lista de productos se obtiene del servidor y se muestra en un `RecyclerView`.
-- **Actualización en tiempo real**: La lista de productos se refresca automáticamente al volver a la pantalla principal.
+Para poner en marcha el proyecto, hay que hacer lo siguiente:
 
-#### Carrito de Compras
-- **Añadir y eliminar**: Funcionalidad para añadir productos al carrito y eliminarlos.
-- **Persistencia**: El contenido del carrito se almacena localmente, persistiendo entre sesiones.
-- **Estado vacío**: Muestra un mensaje informativo cuando el carrito no contiene productos.
+1.  **Requisitos previos:**
+    *   Tener Android Studio instalado
+    *   Tener el servidor Backend (Spring Boot) ejecutándose en el puerto `8080`, en concreto el proyecto que se ha subido en la entrega de la Práctica 1 con nombre "carrito-compras-P3"
 
-#### Proceso de Checkout
-- **Pantalla de resumen**: Muestra el total del pedido antes de la confirmación.
-- **Envío de pedido**: La confirmación de la compra envía el pedido al servidor.
+2.  **Abrir el proyecto:**
+    *   Descomprir el archivo `DelAguilaMartinCristina_AppSource.zip`.
+    *   En Android Studio, seleccionar **File > Open** e ir hasta la carpeta del proyecto
 
-#### Panel de Administración
-- **Acceso restringido**: Formulario de login para verificar las credenciales del administrador.
-- **Gestión de productos**: Permite al administrador visualizar la lista completa de productos.
-- **Añadir productos**: Formulario para crear y guardar nuevos productos en la base de datos del servidor.
-- **Eliminar productos**: Funcionalidad para eliminar productos directamente desde la lista del panel de administración.
+3.  **Configuración de la API:**
+    *   La aplicación está configurada para conectar al emulador mediante `http://10.0.2.2:8080/`.
+    *   Para abrirla en un móvil, hay que editar la variable `BASE_URL` en `src/main/java/com/cristina/carritocompras/ApiClient.java` con la IP local
 
-#### Geolocalización con Google Maps
-- **Mapa interactivo**: Muestra la ubicación del usuario y la de almacenes o puntos de venta.
-- **Ubicación del usuario**: Solicita permisos de ubicación y marca la posición actual del dispositivo en el mapa.
-- **Indicaciones de ruta**: Permite obtener indicaciones para llegar a un almacén pulsando sobre su marcador.
+4.  **Ejecución:**
+    *   Sincronizar el proyecto con Gradle (`Sync Project`).
+    *   Seleccionar un emulador y darle al botón **Run**.
 
-## Tecnologías y Arquitectura
+5.  **Acceso al panel de administración:**
+    *   Desde el menú de la pantalla principal, seleccionar el emoticono de persona (admin). Las credenciales son las siguientes:
+    *   **Usuario:** `admin`
+    *   **Contraseña:** `admin`
 
-#### Frontend (Android)
-- **Lenguaje**: Java
-- **Arquitectura**: Actividades separadas para cada funcionalidad principal.
-- **UI**: `RecyclerView`, `Material Design Components`, `Fragments` (para el mapa).
-- **Red**: `Retrofit` y `OkHttp` para la comunicación con el API REST.
-- **Serialización**: `Gson` para la conversión de objetos Java a JSON.
-- **Imágenes**: `Glide` para la carga y caché de imágenes desde URL.
-- **Geolocalización**: `Google Maps SDK` y `LocationManager`.
+## 2. Dependencias usadas
 
-#### Backend (Spring Boot)
-- **Lenguaje**: Java
-- **Framework**: Spring Boot
-- **Seguridad**: Spring Security para proteger las rutas de administración.
-- **API**: API REST para las operaciones CRUD de productos.
-- **Base de Datos**: JPA/Hibernate (compatible con H2, MySQL, PostgreSQL, etc.).
+El proyecto usa las siguientes librerías externas para su funcionamiento:
 
-## Instalación y Puesta en Marcha
+*   **Retrofit 2 (`com.squareup.retrofit2`):** 
+*   **Gson (`com.google.code.gson`):** Librería para serializar y deserializar objetos Java a formato JSON y viceversa
+*   **Glide (`com.github.bumptech.glide`):** Gestión de carga y caché de imágenes desde URLs
+*   **Google Play Services (`com.google.android.gms`):**
+    *   `play-services-maps`: Para el mapa interactivo de Google Maps
+    *   `play-services-location`: Para la geolocalización del usuario
+*   **Espresso y JUnit:** Para la ejecución de pruebas unitarias e instrumentadas de interfaz
 
-Para ejecutar este proyecto, es necesario configurar tanto el backend como la aplicación Android.
+## 3. Estructura de carpetas y organización del código
 
-#### 1. Backend (Spring Boot)
-- Clonar y ejecutar el servidor Spring Boot.
-- Asegurar que la configuración de seguridad (`SecurityConfig.java`) permite el acceso a las rutas `/api/**`.
-- Verificar que el servidor se ejecuta en el puerto `8080`.
+El código fuente está en `src/main/java/com/cristina/carritocompras/` y se organiza de la siguiente manera:
 
-#### 2. Aplicación Android
-1.  **Clonar el repositorio** y abrir el proyecto en Android Studio.
-2.  **Configurar la API Key de Google Maps**:
-    - Obtener una clave de API válida desde la Google Cloud Console.
-    - Sustituir el valor de `com.google.android.geo.API_KEY` en el archivo `app/src/main/AndroidManifest.xml` por la clave obtenida.
-3.  **Verificar la URL del Backend**:
-    - Confirmar que la `BASE_URL` en `RetrofitClient.java` apunta a la dirección correcta.
-    - Para un emulador Android, la dirección para acceder al `localhost` del ordenador es `http://10.0.2.2:8080/`.
-    - Si se usa un dispositivo físico, se debe reemplazar por la IP local del ordenador en la red (ej: `http://192.168.1.100:8080/`).
-4.  **Ejecutar la aplicación** en un emulador o dispositivo físico.
+*   **`api/`:**
+    *   `ApiClient.java`: para la instancia de Retrofit.
+    *   `ApiService.java`: se definen los endpoints HTTP de la API.
+*   **`models/`:** se representan los datos (`Product`, `OrderRequest`, `OrderProduct`, `OrderResponse`).
+*   **`adapters/`:**
+    *   `ProductAdapter.java`: Gestiona la lista del catálogo principal
+    *   `CartAdapter.java`: Gestiona la lista visual del carrito
+    *   `AdminProductAdapter.java`: Gestiona la lista del panel de administración
+*   **Actividades (Views/Controllers):**
+    *   `MainActivity.java`: Pantalla principal y lógica de filtrado
+    *   `CartActivity.java`: Pantalla del carrito y cálculo de totales
+    *   `CheckoutActivity.java`: Pantalla de finalización de compra
+    *   `MapsActivity.java`: Pantalla de mapa con marcadores y ubicación
+    *   `Admin...Activity.java`: Pantallas de Login y gestión CRUD de productos
+*   **Gestores:**
+    *   `CartManager.java`: Clase Singleton encargada de la lógica de negocio del carrito y la persistencia de datos (SharedPreferences)
 
-## Credenciales de Administrador
+## 4. Lista de endpoints API utilizados y su descripción
 
-Para acceder al panel de administración de productos, utilizar las siguientes credenciales:
-- **Usuario**: `admin`
-- **Contraseña**: `1234`
+La aplicación interactúa con los siguientes recursos del servidor:
+
+| Método HTTP | Endpoint | Descripción |
+| :--- | :--- | :--- |
+| **GET** | `/api/products` | Descarga la lista completa de productos. Admite el parámetro `category` para filtrar. |
+| **POST** | `/api/products` | Crea un nuevo producto en la base de datos (Usado en el panel Admin). |
+| **PUT** | `/api/products/{id}` | Actualiza los datos de un producto existente identificado por su ID. |
+| **DELETE** | `/api/products/{id}` | Elimina un producto del catálogo. |
+| **POST** | `/api/carts` | Envía la confirmación del pedido (Checkout). El cuerpo de la petición incluye el ID de usuario, fecha y lista de productos. |
