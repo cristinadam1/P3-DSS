@@ -16,6 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -86,6 +87,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+
+        // Almacén 1: Zona norte (Almanjáyar)
+        LatLng almacenNorte = new LatLng(37.2050, -3.6100);
+        mMap.addMarker(new MarkerOptions()
+                .position(almacenNorte)
+                .title("Almacén Norte")
+                .snippet("Polígono Industrial")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+        // Almacén 2: Zona centro (Recogidas)
+        LatLng almacenCentro = new LatLng(37.1773, -3.6000);
+        mMap.addMarker(new MarkerOptions()
+                .position(almacenCentro)
+                .title("Tienda Centro")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+        // Almacén 3: Zona sur (Nevada/PTS)
+        LatLng almacenSur = new LatLng(37.1550, -3.6050);
+        mMap.addMarker(new MarkerOptions()
+                .position(almacenSur)
+                .title("Almacén Sur")
+                .snippet("Parque Tecnológico")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
